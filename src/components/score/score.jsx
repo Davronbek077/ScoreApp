@@ -42,6 +42,7 @@ const Score = () => {
     <div className="score-wrap">
       <div className='score'>
 
+      <div className="search-wrap">
       <div className="search-input">
       <input className='search'
         type="text"
@@ -50,6 +51,7 @@ const Score = () => {
         onChange={(e) => setSearchTerm(e.target.value)}
         style={{ marginBottom: '15px', padding: '5px', display: 'block' }}
       />
+      </div>
       </div>
 
       {filteredStudents.length > 0 ? (

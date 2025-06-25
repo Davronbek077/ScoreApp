@@ -13,10 +13,11 @@
     padding-right: 25px;
     padding-top: 25px;
     padding-bottom: 25px;
+    margin-top: 115px;
 }
 
 .search{
-    width: 100%;
+    width: calc(100% - 50px);
     height: 38px;
     border: 2px solid rgb(204, 204, 204);
     border-radius: 5px;
@@ -37,7 +38,16 @@
 }
 
 .search-input{
-    margin-bottom: 30px;
+    position: fixed;
+    left: 50%;
+    top: 65px;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 820px;
+    padding: 10px;
+    border-radius: 8px;
+    z-index: 100;
+    margin-left: 25px;
 }
 
 .student p{
