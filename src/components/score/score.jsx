@@ -57,7 +57,7 @@ const Score = () => {
             <div className='student' key={student.id} style={{ marginBottom: '10px' }}>
               <p>{student.name}</p>
               <span id='button' style={{ marginLeft: '10px' }}>
-                <p id='score'>Ball: {student.score}</p>
+                <p id='score'>Ball: {student.score > 0 ? `+${student.score}` : student.score}</p>
                 <button className='plus' style={{ marginLeft: '10px' }} onClick={() => handlePlus(student.id)}>+</button>
                 <button className='minus' style={{ marginLeft: '5px' }} onClick={() => handleMinus(student.id)}>-</button>
                 <button className='del' style={{ marginLeft: '5px' }} onClick={() => handleDelete(student.id)}>O'chirish</button>
