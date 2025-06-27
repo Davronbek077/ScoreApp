@@ -1,78 +1,71 @@
-import React, { useState, useEffect } from 'react';
-import "./score.css"
-import Add from '../add/add';
+import React, { useEffect, useState } from 'react';
+import { db } from '../../firebase';
+import { ref, onValue, set, remove } from 'firebase/database';
+import './score.css';
 
-const Score = () => {
-  const [students, setStudents] = useState(() => {
-    const saved = localStorage.getItem('students');
-    return saved ? JSON.parse(saved) : [];
-  });
-
-  const [newName, setNewName] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
+const Score = ({ role }) => {
+  const [students, setStudents] = useState([]);
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
-    localStorage.setItem('students', JSON.stringify(students));
-  }, [students]);
+    const studentsRef = ref(db, 'students');
+    onValue(studentsRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const arr = Object.keys(data).map(id => ({ id, ...data[id] }));
+        setStudents(arr);
+      } else {
+        setStudents([]);
+      }
+    });
+  }, []);
 
-  const handlePlus = (id) => {
-    setStudents(students.map(s => s.id === id ? { ...s, score: s.score + 1 } : s));
-  };
-
-  const handleMinus = (id) => {
-    setStudents(students.map(s => s.id === id ? { ...s, score: s.score - 1 } : s));
-  };
-
-  const handleAddStudent = () => {
-    if (newName.trim()) {
-      setStudents([...students, { id: Date.now(), name: newName, score: 0 }]);
-      setNewName("");
-    }
+  const handleUpdate = (id, value) => {
+    set(ref(db, 'students/' + id + '/score'), value);
   };
 
   const handleDelete = (id) => {
-    setStudents(students.filter(s => s.id !== id));
+    remove(ref(db, 'students/' + id));
   };
 
-  const filteredStudents = students.filter(s =>
-    s.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filtered = students.filter(s =>
+    s.name.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
     <div className="score-wrap">
-      <div className='score'>
-
-      <div className="search-wrap">
-      <div className="search-input">
-      <input className='search'
-        type="text"
-        placeholder="Qidiruv..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        style={{ marginBottom: '15px', padding: '5px', display: 'block' }}
-      />
-      </div>
+      <div className='search-input'>
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Qidiruv..."
+          className="search"
+        />
       </div>
 
-      {filteredStudents.length > 0 ? (
-        filteredStudents.map((student) => (
-            <div className='student' key={student.id} style={{ marginBottom: '10px' }}>
-              <p>{student.name}</p>
-              <span id='button' style={{ marginLeft: '10px' }}>
-                <p id='score'>Ball: {student.score > 0 ? `+${student.score}` : student.score}</p>
-                <button className='plus' style={{ marginLeft: '10px' }} onClick={() => handlePlus(student.id)}>+</button>
-                <button className='minus' style={{ marginLeft: '5px' }} onClick={() => handleMinus(student.id)}>-</button>
-                <button className='del' style={{ marginLeft: '5px' }} onClick={() => handleDelete(student.id)}>O'chirish</button>
-              </span>
+      <div className="score">
+        {filtered.length ? (
+          filtered.map((s) => (
+            <div className='student' key={s.id}>
+              <p>{s.name}</p>
+              <div id="button">
+                <p id="score"><span>Ball:</span>{s.score > 0 ? `+${s.score}` : s.score}</p>
+                {role === 'teacher' && (
+                  <>
+                    <button className='plus' onClick={() => handleUpdate(s.id, s.score + 1)}>+</button>
+                    <button className='minus' onClick={() => handleUpdate(s.id, s.score - 1)}>-</button>
+                    <button className='del' onClick={() => handleDelete(s.id)}>O‘chirish</button>
+                  </>
+                )}
+              </div>
             </div>
           ))
-      ) : (
-        <p>Bunday o'quvchi topilmadi</p>
-      )}
-
+        ) : (
+          <p>O‘quvchi topilmadi</p>
+        )}
+      </div>
     </div>
-    </div>
-    
   );
 };
 

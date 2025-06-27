@@ -1,24 +1,28 @@
-import { useState } from 'react'
-import './App.css'
-import Pages from './pages/pages'
-import { Routes, Route } from 'react-router-dom'
-import Score from './components/score/score'
-import Add from './components/add/add'
-import Navbar from './components/navbar/Navbar'
+import React, { useState } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import Pages from './pages/pages';
+import Navbar from './components/navbar/Navbar';
+import Score from './components/score/Score';
+import Add from './components/add/add';
+import Login from './components/login/Login';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [role, setRole] = useState(null);
+
+  if (!role) {
+    return <Login setRole={setRole} />;
+  }
 
   return (
     <>
-      <Pages/>
-      <Navbar/>
+      {role === 'teacher' && <Pages />}
+      <Navbar />
       <Routes>
-      <Route path="/" element={<Score />} />
-      <Route path="add" element={<Add />} />
+        <Route path="/" element={<Score role={role} />} />
+        {role === 'teacher' && <Route path="/add" element={<Add />} />}
       </Routes>
     </>
-  )   
+  );
 }
 
-export default App
+export default App;

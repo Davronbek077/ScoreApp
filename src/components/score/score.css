@@ -16,12 +16,17 @@
     margin-top: 115px;
 }
 
+#score, #score span{
+    margin-right: 8px;
+}
+
 .search{
     width: calc(100% - 50px);
     height: 38px;
     border: 2px solid rgb(204, 204, 204);
     border-radius: 5px;
     font-size: 16px;
+    padding-left: 10px;
 }
 
 .search:focus{
@@ -35,11 +40,12 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: 12px;
 }
 
 .search-input{
     position: fixed;
-    left: 50%;
+    left: 51%;
     top: 59px;
     transform: translateX(-50%);
     width: 100%;
@@ -90,4 +96,10 @@
     border-radius: 5px;
     padding: 6px 10px;
 
+}
+
+@media screen and (max-width: 530px) {
+    #score span{
+        display: none;
+    }
 }
