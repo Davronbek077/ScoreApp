@@ -8,7 +8,7 @@ const Login = ({ setRole }) => {
   const navigate = useNavigate();
 
   const handleLogin = () => {
-    if (password === '3284') {
+    if (password === '3217') {
       setRole('teacher');
       navigate('/');
     } else if (password === '1208') {
