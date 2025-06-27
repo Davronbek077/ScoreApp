@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Pages from './pages/pages';
 import Navbar from './components/navbar/Navbar';
-import Score from './components/score/Score';
+import Score from './components/score/score';
 import Add from './components/add/add';
 import Login from './components/login/Login';
 
