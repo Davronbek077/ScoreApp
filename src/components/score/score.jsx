@@ -47,7 +47,7 @@ const Score = ({ role }) => {
       <div className="score">
         {filtered.length ? (
           filtered.map((s) => (
-            <div className='student' key={s.id}>
+            <div className={`student ${role === 'student' ? 'student-border' : ''}`} key={s.id}>
               <p>{s.name}</p>
               <div id="button">
                 <p id="score"><span>Ball:</span>{s.score > 0 ? `+${s.score}` : s.score}</p>

@@ -104,3 +104,10 @@
         display: none;
     }
 }
+
+.student-border{
+    border: 1px solid rgba(0, 0, 0, 0.685);
+    padding: 13px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
