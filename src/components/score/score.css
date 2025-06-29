@@ -111,3 +111,40 @@
     margin-bottom: 10px;
     border-radius: 5px;
 }
+
+#score {
+    cursor: pointer;
+    user-select: none;
+}
+
+.score-input {
+    width: 80px;
+    padding: 4px;
+    font-size: 14px;
+    border: 2px solid rgb(189, 189, 189);
+    border-radius: 5px;
+  }
+
+.score-input:focus{
+    outline: none;
+}
+
+@media screen and (min-width: 1024px) {
+    .student p{
+        font-size: 20px;
+    }
+
+    #score, #score span, .plus, .minus{
+        font-size: 20px;
+    }
+
+    .del{
+        font-size: 15px;
+    }
+
+    .score-input{
+        width: 130px;
+        font-size: 20px;
+    }
+
+}

@@ -6,6 +6,8 @@ import './score.css';
 const Score = ({ role }) => {
   const [students, setStudents] = useState([]);
   const [search, setSearch] = useState('');
+  const [editScores, setEditScores] = useState({});
+  const [editMode, setEditMode] = useState({});
 
   useEffect(() => {
     const studentsRef = ref(db, 'students');
@@ -26,6 +28,28 @@ const Score = ({ role }) => {
 
   const handleDelete = (id) => {
     remove(ref(db, 'students/' + id));
+  };
+
+  const handleScoreClick = (id, currentScore) => {
+    if (role === 'teacher') {
+      setEditMode(prev => ({ ...prev, [id]: true }));
+      setEditScores(prev => ({ ...prev, [id]: currentScore }));
+    }
+  };
+
+  const handleInputChange = (id, value) => {
+    setEditScores(prev => ({ ...prev, [id]: value }));
+  };
+
+  const handleInputKeyPress = (e, id) => {
+    if (e.key === 'Enter') {
+      let newScore = parseInt(editScores[id], 10);
+      if (!isNaN(newScore)) {
+        handleUpdate(id, newScore);
+      }
+      setEditMode(prev => ({ ...prev, [id]: false }));
+      setEditScores(prev => ({ ...prev, [id]: '' }));
+    }
   };
 
   const filtered = students.filter(s =>
@@ -50,7 +74,22 @@ const Score = ({ role }) => {
             <div className={`student ${role === 'student' ? 'student-border' : ''}`} key={s.id}>
               <p>{s.name}</p>
               <div id="button">
-                <p id="score"><span>Ball:</span>{s.score > 0 ? `+${s.score}` : s.score}</p>
+                {editMode[s.id] ? (
+                  <input
+                    className='score-input'
+                    type="number"
+                    autoFocus
+                    placeholder="Ball kiriting"
+                    value={editScores[s.id]}
+                    onChange={(e) => handleInputChange(s.id, e.target.value)}
+                    onKeyPress={(e) => handleInputKeyPress(e, s.id)}
+                    onBlur={() => setEditMode(prev => ({ ...prev, [s.id]: false }))}
+                  />
+                ) : (
+                  <p id="score" onClick={() => handleScoreClick(s.id, s.score)}>
+                    <span>Ball:</span> {s.score > 0 ? `+${s.score}` : s.score}
+                  </p>
+                )}
                 {role === 'teacher' && (
                   <>
                     <button className='plus' onClick={() => handleUpdate(s.id, s.score + 1)}>+</button>
