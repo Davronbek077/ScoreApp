@@ -21,7 +21,7 @@ const Login = ({ setRole, setGroupId }) => {
   }, []);
 
   const handleLogin = () => {
-    if (password === '3217') {
+    if (password === '1462') {
       setRole('teacher');
       setGroupId(null);
       navigate('/');
