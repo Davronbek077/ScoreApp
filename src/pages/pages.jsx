@@ -1,16 +1,18 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import "./pages.css"
+import React from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import './pages.css';
 
-const Pages = () => {
+const Pages = ({ groupId: propGroupId }) => {
+  const params = useParams();
+  const groupId = propGroupId || params.groupId;
+  const navigate = useNavigate();
+
   return (
-    <div className='pages-wrap'>
-      <div className="pages">
-      <Link to={"/"}>Asosiy</Link>
-      <Link to={"./add"}>Qo'shish</Link>
-      </div>
+    <div className="pages-section">
+      {groupId && <button onClick={() => navigate(`/group/${groupId}`)}>Asosiy</button>}
+      {groupId && <button onClick={() => navigate(`/group/${groupId}/add`)}>Qo'shish</button>}
     </div>
-  )
-}
+  );
+};
 
-export default Pages
+export default Pages;

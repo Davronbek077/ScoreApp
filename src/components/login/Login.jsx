@@ -1,21 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { db } from '../../firebase';
+import { ref, onValue } from 'firebase/database';
 import "./Login.css"
 
-const Login = ({ setRole }) => {
+const Login = ({ setRole, setGroupId }) => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [groups, setGroups] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const groupsRef = ref(db, 'groups');
+    const unsubscribe = onValue(groupsRef, (snapshot) => {
+      const data = snapshot.val() || {};
+      const groupList = Object.entries(data).map(([id, value]) => ({ id, ...value }));
+      setGroups(groupList);
+    });
+    return () => unsubscribe();
+  }, []);
 
   const handleLogin = () => {
     if (password === '3217') {
       setRole('teacher');
-      navigate('/');
-    } else if (password === '1208') {
-      setRole('student');
+      setGroupId(null);
       navigate('/');
     } else {
-      setError("Parol noto'g'ri");
+      const found = groups.find(g => g.password === password);
+      if (found) {
+        setRole('student');
+        setGroupId(found.id);
+        navigate(`/group/${found.id}`);
+      } else {
+        setError("Parol noto'g'ri");
+      }
     }
   };
 

@@ -1,33 +1,37 @@
 import React, { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { db } from '../../firebase';
-import { ref, set } from 'firebase/database';
-import { useNavigate } from 'react-router-dom';
-import './add.css'
+import { ref, push } from 'firebase/database';
+import Pages from '../../pages/pages';
+import './add.css';
 
 const Add = () => {
-  const [newName, setNewName] = useState('');
+  const { groupId } = useParams();
+  const [name, setName] = useState('');
   const navigate = useNavigate();
 
-  const handleAdd = () => {
-    if (newName.trim()) {
-      const id = Date.now().toString();
-      set(ref(db, 'students/' + id), {
-        name: newName,
-        score: 0,
-      });
-      setNewName('');
-      navigate('/');
-    }
+  const handleAdd = async (e) => {
+    e.preventDefault();
+    if (!name.trim()) return;
+    const studentsRef = ref(db, `groups/${groupId}/students`);
+    await push(studentsRef, { name });
+    setName('');
+    navigate(`/group/${groupId}`);
   };
 
   return (
-    <div className='add-wrap'>
-      <input
-        value={newName}
-        onChange={(e) => setNewName(e.target.value)}
-        placeholder="Yangi o‘quvchi ismi"
-      />
-      <button onClick={handleAdd}>Qo‘shish</button>
+    <div className="add-container">
+      <form onSubmit={handleAdd}>
+        <input
+          type="text"
+          placeholder="Ism"
+          value={name}
+          onChange={e => setName(e.target.value)}
+          required
+        />
+        <button className='add-btn' type="submit">Qo'shish</button>
+      </form>
+      <Pages groupId={groupId}/>
     </div>
   );
 };

@@ -1,17 +1,22 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { db } from '../../firebase';
 import { ref, onValue, set, remove } from 'firebase/database';
+import Pages from '../../pages/pages';
 import './score.css';
 
-const Score = ({ role }) => {
+const Score = ({ role, groupId: propGroupId }) => {
+  const params = useParams();
+  const groupId = propGroupId || params.groupId;
   const [students, setStudents] = useState([]);
   const [search, setSearch] = useState('');
   const [editScores, setEditScores] = useState({});
   const [editMode, setEditMode] = useState({});
 
   useEffect(() => {
-    const studentsRef = ref(db, 'students');
-    onValue(studentsRef, (snapshot) => {
+    if (!groupId) return;
+    const studentsRef = ref(db, `groups/${groupId}/students`);
+    const unsubscribe = onValue(studentsRef, (snapshot) => {
       const data = snapshot.val();
       if (data) {
         const arr = Object.keys(data).map(id => ({ id, ...data[id] }));
@@ -20,20 +25,21 @@ const Score = ({ role }) => {
         setStudents([]);
       }
     });
-  }, []);
+    return () => unsubscribe();
+  }, [groupId]);
 
   const handleUpdate = (id, value) => {
-    set(ref(db, 'students/' + id + '/score'), value);
+    set(ref(db, `groups/${groupId}/students/${id}/score`), value);
   };
 
   const handleDelete = (id) => {
-    remove(ref(db, 'students/' + id));
+    remove(ref(db, `groups/${groupId}/students/${id}`));
   };
 
   const handleScoreClick = (id, currentScore) => {
     if (role === 'teacher') {
       setEditMode(prev => ({ ...prev, [id]: true }));
-      setEditScores(prev => ({ ...prev, [id]: currentScore }));
+      setEditScores(prev => ({ ...prev, [id]: currentScore ?? 0 }));
     }
   };
 
@@ -53,7 +59,7 @@ const Score = ({ role }) => {
   };
 
   const filtered = students.filter(s =>
-    s.name.toLowerCase().includes(search.toLowerCase())
+    s.name?.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -67,14 +73,13 @@ const Score = ({ role }) => {
           className="search"
         />
       </div>
-
       <div className="score">
         {filtered.length ? (
           filtered.map((s) => (
             <div className={`student ${role === 'student' ? 'student-border' : ''}`} key={s.id}>
               <p>{s.name}</p>
               <div id="button">
-                {editMode[s.id] ? (
+                {role === 'teacher' && editMode[s.id] ? (
                   <input
                     className='score-input'
                     type="number"
@@ -86,14 +91,14 @@ const Score = ({ role }) => {
                     onBlur={() => setEditMode(prev => ({ ...prev, [s.id]: false }))}
                   />
                 ) : (
-                  <p id="score" onClick={() => handleScoreClick(s.id, s.score)}>
-                    <span>Ball:</span> {s.score > 0 ? `+${s.score}` : s.score}
+                  <p id="score" onClick={() => role === 'teacher' && handleScoreClick(s.id, s.score)}>
+                    <span>Ball:</span> {s.score > 0 ? `+${s.score}` : s.score || 0}
                   </p>
                 )}
                 {role === 'teacher' && (
                   <>
-                    <button className='plus' onClick={() => handleUpdate(s.id, s.score + 1)}>+</button>
-                    <button className='minus' onClick={() => handleUpdate(s.id, s.score - 1)}>-</button>
+                    <button className='plus' onClick={() => handleUpdate(s.id, (s.score || 0) + 1)}>+</button>
+                    <button className='minus' onClick={() => handleUpdate(s.id, (s.score || 0) - 1)}>-</button>
                     <button className='del' onClick={() => handleDelete(s.id)}>O‘chirish</button>
                   </>
                 )}
@@ -101,9 +106,10 @@ const Score = ({ role }) => {
             </div>
           ))
         ) : (
-          <p>O‘quvchi topilmadi</p>
+          <p className="no-student">O‘quvchi topilmadi</p>
         )}
       </div>
+      {role === 'teacher' && <Pages groupId={groupId} />}
     </div>
   );
 };

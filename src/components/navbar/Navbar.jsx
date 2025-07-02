@@ -1,14 +1,19 @@
-import React from 'react'
-import "./navbar.css"
+import React from 'react';
+import './navbar.css';
 
-const Navbar = () => {
-  return (
-    <div className='navbar-wrap'>
-      <div className="navbar">
-      <h2>J/14/Asadbek.Q/A1</h2>
-      </div>
+const Navbar = ({ onMenuClick, role, groupName, groupPassword }) => (
+  <nav className="navbar">
+    {role === 'teacher' && (
+      <button className="menu-icon" onClick={onMenuClick}>
+        <span>&#9776;</span>
+      </button>
+    )}
+    <div className="navbar-title">
+    {groupName
+  ? `${groupName}${role === 'teacher' && groupPassword ? ` (${groupPassword})` : ''}`
+  : "ScoreApp"}
     </div>
-  )
-}
+  </nav>
+);
 
-export default Navbar
+export default Navbar;
