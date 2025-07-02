@@ -1,200 +1,175 @@
 .sidebar-overlay {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.3);
-    z-index: 200;
-    display: flex;
-    justify-content: flex-start;
-  }
-  .sidebar {
-    width: 300px;
-    background: #fff;
-    height: 100%;
-    box-shadow: 2px 0 8px rgba(0,0,0,0.1);
-    padding: 20px 15px;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-  }
-  .sidebar-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .close-btn {
-    background: none;
-    border: none;
-    font-size: 2rem;
-    cursor: pointer;
-  }
-  .group-list {
-    list-style: none;
-    padding: 0;
-    margin: 20px 0;
-    flex: 1;
-    overflow-y: auto;
-  }
-  .group-list li {
-    margin-bottom: 10px;
-  }
-  .group-list a {
-    text-decoration: none;
-    color: #1976d2;
-    font-weight: 500;
-    font-size: 20px;
-  }
-  .add-group-section {
-    margin-bottom: 100px;
-  }
-  .add-group-btn {
-    width: 100%;
-    padding: 8px;
-    background: #1976d2;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  .add-group-input {
-    display: flex;
-    gap: 8px;
-  }
-  .add-group-input input {
-    flex: 1;
-    padding: 6px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  .add-group-input button {
-    padding: 6px 10px;
-    border: none;
-    border-radius: 4px;
-    background: #1976d2;
-    color: #fff;
-    cursor: pointer;
-  }
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.3);
+  z-index: 200;
+  display: flex;
+  justify-content: flex-start;
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+.sidebar {
+  width: 300px;
+  background: #fff;
+  height: 100%;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+  padding: 20px 15px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(-100%);
+  opacity: 0;
+  transition: transform 0.3s cubic-bezier(.4,0,.2,1), opacity 0.3s;
+}
+.sidebar-open .sidebar,
+.sidebar.sidebar-slide {
+  transform: translateX(0);
+  opacity: 1;
+}
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+}
+.group-list {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #a7a7a7 #f1f1f1;
+}
 
-  .add-group-input {
-    display: flex;
-    flex-direction: column;   /* <-- Bitta ustun qilib beradi */
-    gap: 10px;
-    margin-top: 10px;
-  }
-  
-  .add-group-input input {
-    padding: 8px 12px;
-    border: 1.5px solid #bbb;
-    border-radius: 6px;
-    font-size: 1rem;
-    outline: none;
-    transition: border 0.2s;
-  }
-  
-  .add-group-input input:focus {
-    border: 1.5px solid #1976d2;
-  }
-  
-  .add-group-input button {
-    padding: 8px 18px;
-    background: #1976d2;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background 0.2s;
-    text-align: center;
-  }
-  
-  .add-group-input button:hover {
-    background: #1565c0;
-  }
+.group-list a{
+  font-size: 20px;
+  text-decoration: none;
+  color: #1565c0;
+  font-weight: 500;
+}
 
-  .delete-group-btn {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 1.2rem;
-    cursor: pointer;
-    margin-left: 8px;
-    transition: color 0.2s;
-    background-color: #1565c0;
-    border-radius: 5px;
-    padding: 5px;
-  }
-  .delete-group-btn:hover {
-    color: #fff;
-    background: #d32f2f;
-  }
-
-  .group-list {
-    list-style: none;
-    padding: 0;
-    margin: 20px 0;
-    flex: 1;
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: #a7a7a7 #f1f1f1;
-  }
-  
-  .group-list::-webkit-scrollbar {
-    width: 6px;
-    border-radius: 6px;
-    background: #f1f1f1;
-  }
-  .group-list::-webkit-scrollbar-thumb {
-    background: #1976d2;
-    border-radius: 6px;
-  }
-  .group-list::-webkit-scrollbar-thumb:hover {
-    background: #1565c0;
-  }
-
-  .modal-overlay {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.3);
-    z-index: 9999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .modal {
-    background: #fff;
-    padding: 32px 24px 20px 24px;
-    border-radius: 12px;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.15);
-    min-width: 280px;
-    text-align: center;
-  }
-  .modal-actions {
-    margin-top: 18px;
-    display: flex;
-    gap: 16px;
-    justify-content: center;
-  }
-  .modal-yes {
-    background: #d32f2f;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    padding: 8px 20px;
-    font-size: 1rem;
-    cursor: pointer;
-  }
-  .modal-no {
-    background: #e0e0e0;
-    color: #333;
-    border: none;
-    border-radius: 6px;
-    padding: 8px 20px;
-    font-size: 1rem;
-    cursor: pointer;
-  }
-  .modal-yes:hover {
-    background: #b71c1c;
-  }
-  .modal-no:hover {
-    background: #bdbdbd;
-  }
+.group-list::-webkit-scrollbar {
+  width: 6px;
+  border-radius: 6px;
+  background: #f1f1f1;
+}
+.group-list::-webkit-scrollbar-thumb {
+  background: #1976d2;
+  border-radius: 6px;
+}
+.group-list::-webkit-scrollbar-thumb:hover {
+  background: #1565c0;
+}
+.add-group-section {
+  margin-bottom: 100px;
+}
+.add-group-btn {
+  width: 100%;
+  padding: 8px;
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.add-group-input {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+.add-group-input input {
+  padding: 8px 12px;
+  border: 1.5px solid #bbb;
+  border-radius: 6px;
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.2s;
+}
+.add-group-input input:focus {
+  border: 1.5px solid #1976d2;
+}
+.add-group-input button {
+  padding: 8px 18px;
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+  text-align: center;
+}
+.add-group-input button:hover {
+  background: #1565c0;
+}
+.delete-group-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin-left: 8px;
+  transition: color 0.2s;
+  background-color: #1565c0;
+  border-radius: 5px;
+  padding: 5px 10px;
+}
+.delete-group-btn:hover {
+  color: #fff;
+  background: #d32f2f;
+}
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.3);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal {
+  background: #fff;
+  padding: 32px 24px 20px 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+  min-width: 280px;
+  text-align: center;
+}
+.modal-actions {
+  margin-top: 18px;
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+.modal-yes {
+  background: #d32f2f;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.modal-no {
+  background: #e0e0e0;
+  color: #333;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.modal-yes:hover {
+  background: #b71c1c;
+}
+.modal-no:hover {
+  background: #bdbdbd;
+}
