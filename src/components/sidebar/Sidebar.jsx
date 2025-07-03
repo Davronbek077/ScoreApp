@@ -61,7 +61,7 @@ const Sidebar = ({ onClose, role, groupId }) => {
                     onClick={() => setDeleteModal({ open: true, groupId: group.id })}
                     title="Guruhni o‘chirish"
                   >
-                    🗑
+                    <i class='bxr  bx-trash'  ></i> 
                   </button>
                 )}
               </li>

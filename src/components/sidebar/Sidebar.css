@@ -120,7 +120,8 @@
   transition: color 0.2s;
   background-color: #1565c0;
   border-radius: 5px;
-  padding: 5px 10px;
+  padding: 2px 10px;
+  padding-top: 5px;
 }
 .delete-group-btn:hover {
   color: #fff;
