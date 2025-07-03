@@ -52,6 +52,7 @@
   text-decoration: none;
   color: #1565c0;
   font-weight: 500;
+  padding-bottom: 20px;
 }
 
 .group-list::-webkit-scrollbar {
